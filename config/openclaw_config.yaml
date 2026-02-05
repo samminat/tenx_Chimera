@@ -1,0 +1,29 @@
+# /config/openclaw_config.yaml
+# OpenClaw Integration Configuration
+
+openclaw:
+  api:
+    base_url: "${OPENCLAW_API_BASE_URL}"
+    auth_type: "api_key"
+    api_key: "${OPENCLAW_API_KEY}"    # Will be loaded from .env
+    timeout_seconds: 30
+    max_retries: 3
+    retry_backoff_seconds: 5
+
+  events:
+    enable_streaming: true
+    stream_url: "wss://stream.openclaw.example.com/events"
+    heartbeat_interval_seconds: 60
+
+  logging:
+    enable_logging: true
+    log_level: "INFO"          # Options: DEBUG, INFO, WARN, ERROR
+    log_file: "logs/openclaw_integration.log"
+
+  validation:
+    enforce_schema: true
+    schema_file: "schemas/openclaw_payload_schema.json"
+
+  alerts:
+    notify_supervisor_on_failure: true
+    max_failed_attempts: 3
