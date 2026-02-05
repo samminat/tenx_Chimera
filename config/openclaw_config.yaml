@@ -1,11 +1,11 @@
-# /config/openclaw_config.yaml
-# OpenClaw Integration Configuration
+# openclaw_config.yaml.sample
+# Complete OpenClaw Integration Configuration for AI Influencer Agent System
 
 openclaw:
   api:
-    base_url: "${OPENCLAW_API_BASE_URL}"
-    auth_type: "api_key"
-    api_key: "${OPENCLAW_API_KEY}"    # Will be loaded from .env
+    base_url: "${OPENCLAW_API_BASE_URL}"        # Loaded from .env
+    auth_type: "api_key"                        # Options: api_key, oauth2
+    api_key: "${OPENCLAW_API_KEY}"              # Loaded from .env
     timeout_seconds: 30
     max_retries: 3
     retry_backoff_seconds: 5
@@ -17,7 +17,7 @@ openclaw:
 
   logging:
     enable_logging: true
-    log_level: "INFO"          # Options: DEBUG, INFO, WARN, ERROR
+    log_level: "INFO"                            # Options: DEBUG, INFO, WARN, ERROR
     log_file: "logs/openclaw_integration.log"
 
   validation:
@@ -27,3 +27,36 @@ openclaw:
   alerts:
     notify_supervisor_on_failure: true
     max_failed_attempts: 3
+
+agents:
+  influencer_agent:
+    enable: true
+    polling_interval_seconds: 60
+    max_influencers_per_request: 50
+  research_agent:
+    enable: true
+    update_interval_seconds: 300
+    max_trends_to_track: 10
+  generation_agent:
+    enable: true
+    max_content_length: 2000
+    content_format: "markdown"
+  safety_agent:
+    enable: true
+    scan_frequency_seconds: 120
+    alert_on_violation: true
+  supervisor_agent:
+    enable: true
+    escalation_threshold: 3
+    max_concurrent_tasks: 5
+
+sandbox:
+  enable: true
+  api_url: "https://sandbox.api.openclaw.example.com"
+  api_key: "${OPENCLAW_API_KEY}"                # Use same key or sandbox key
+
+environment:
+  name: "development"                           # Options: development, staging, production
+  debug_mode: true
+  max_log_file_size_mb: 10
+  backup_logs: true

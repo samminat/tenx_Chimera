@@ -1,0 +1,8 @@
+graph TD
+    subgraph Workflow
+        RA[Research Agent] --> IA[Influencer Agent] --> GA[Generation Agent]
+    end
+    SA[Supervisor Agent] -->|Orchestrates| Workflow
+    SAF[Safety Agent] -->|Monitors All| Workflow
+    SAF -->|Escalates Issues| SA
+    SA -->|Retry or Pause Tasks| Workflow

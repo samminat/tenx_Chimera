@@ -1,0 +1,7 @@
+graph LR
+    ENV[.env file] -->|API Key, Base URL| CONFIG[openclaw_config.yaml]
+    CONFIG -->|Loaded by| RA[Research Agent]
+    CONFIG -->|Loaded by| IA[Influencer Agent]
+    CONFIG -->|Loaded by| GA[Generation Agent]
+    CONFIG -->|Loaded by| SA[Supervisor Agent]
+    CONFIG -->|Loaded by| SAF[Safety Agent]

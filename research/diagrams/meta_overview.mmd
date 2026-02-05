@@ -1,0 +1,12 @@
+graph TD
+    RA[Research Agent] --> IA[Influencer Agent] --> GA[Generation Agent]
+    GA --> SA[Supervisor Agent]
+    SAF[Safety Agent] ---|Monitors| RA
+    SAF ---|Monitors| IA
+    SAF ---|Monitors| GA
+    SAF ---|Monitors| SA
+    RA --> OC[OpenClaw Platform]
+    IA --> OC
+    GA --> OC
+    SA -->|Coordinates| OC
+    SAF ---|Monitors| OC

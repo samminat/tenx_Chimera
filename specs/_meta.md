@@ -21,14 +21,35 @@ This repository implements a **Spec-Driven Development (SDD) workflow** for a mu
 
 ## 2. Folder Structure
 
-/research # Exploration, trade-offs, architectural thinking
-/specs # Ratified SRS and contracts (source of truth)
-/tests # Acceptance tests for each agent and Supervisor
-/src # Implementation (blocked until specs ratified)
-/config # Agent configuration YAML files
+/research # Exploration, trade-offs, architectural thinking  
+/specs  # Ratified SRS, functional/technical specs, contracts, RATIFICATION.md
+/tests # Acceptance tests for each agent and Supervisor  
+/src # Implementation (blocked until specs ratified)  
+/config # Agent configuration YAML files  
+
 ---
 
-## 3. Dependencies
+## 3. System Architecture Diagrams
+
+### 3.1 Agent Workflow
+![Agent Workflow](/research/diagrams/agent_workflow.svg)  
+*Shows the sequence and interaction of agents, and how Safety and Supervisor monitor workflows.*
+
+### 3.2 OpenClaw Integration
+![OpenClaw Integration](/research/diagrams/openclaw_integration.svg)  
+*Illustrates communication of agents with OpenClaw platform, Supervisor coordination, and Safety monitoring.*
+
+### 3.3 Supervisor & Safety Orchestration
+![Supervisor & Safety Orchestration](/research/diagrams/supervisor_safety_flow.svg)  
+*Highlights monitoring, retries, and escalation protocols for the Supervisor and Safety Agent.*
+
+### 3.4 Configuration & Environment
+![Configuration & Environment](/research/diagrams/config_env_flow.svg)  
+*Shows how `.env` and `openclaw_config.yaml` are loaded by all agents, Supervisor, and Safety Agent.*
+
+---
+
+## 4. Dependencies
 - **Runtime:** Python 3.11 or Node.js (depending on agent implementation)  
 - **External APIs:**  
   - Instagram Graph API  
@@ -39,7 +60,7 @@ This repository implements a **Spec-Driven Development (SDD) workflow** for a mu
 
 ---
 
-## 4. Versioning and Ratification
+## 5. Versioning and Ratification
 - All **SRS and contract files** must be **ratified** before any implementation in `/src`.  
 - Acceptance tests in `/tests` are written against **ratified specifications**.  
 - `_meta.md` serves as a **single source of project metadata and governance**.  
@@ -47,7 +68,7 @@ This repository implements a **Spec-Driven Development (SDD) workflow** for a mu
 
 ---
 
-## 5. Governance Notes
+## 6. Governance Notes
 - No agent implementation shall bypass **ratified acceptance tests**.  
 - Safety-critical components must always be monitored by **Safety Agent**.  
 - Supervisor Agent enforces **execution order, retries, and escalation protocols**.  
@@ -55,7 +76,7 @@ This repository implements a **Spec-Driven Development (SDD) workflow** for a mu
 
 ---
 
-## 6. Approval Signatures
+## 7. Approval Signatures
 
 | Role               | Name               | Signature | Date       |
 |-------------------|------------------|-----------|------------|

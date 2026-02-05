@@ -1,0 +1,12 @@
+graph LR
+    RA[Research Agent] --> IA[Influencer Agent]
+    IA --> GA[Generation Agent]
+    GA --> OC[OpenClaw Platform]
+    SAF[Safety Agent] ---|Monitors| RA
+    SAF ---|Monitors| IA
+    SAF ---|Monitors| GA
+    SAF ---|Monitors| OC
+    SA[Supervisor Agent] -->|Coordinates Calls| OC
+    SA -->|Orchestrates| RA
+    SA -->|Orchestrates| IA
+    SA -->|Orchestrates| GA

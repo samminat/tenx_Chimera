@@ -47,7 +47,19 @@
 
 ---
 
-## 6. Functional Notes
+## 6. System Workflow Diagram
+![Agent Workflow](/research/diagrams/agent_workflow.svg)  
+*Shows the sequence and interaction of agents and how Safety and Supervisor monitor the flow.*
+
+---
+
+## 7. OpenClaw Integration Diagram
+![OpenClaw Integration](/research/diagrams/openclaw_integration.svg)  
+*Illustrates how each agent communicates with the OpenClaw platform, with Supervisor coordination and Safety monitoring.*
+
+---
+
+## 8. Functional Notes
 - Each agent is designed to be **modular and testable independently**  
 - Agents communicate only through **defined contracts and interfaces**  
 - Functional behavior is verified using **acceptance tests** in `/tests`  

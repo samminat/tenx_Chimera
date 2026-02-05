@@ -1,0 +1,21 @@
+%% Agent workflow diagram for Project Chimera
+%% Generated from architecture strategy (Hierarchical Swarm)
+
+flowchart TD
+    Human[Human Reviewer]
+    Supervisor[Supervisor Agent]
+    Research[Research Agent]
+    Generation[Generation Agent]
+    Safety[Safety Agent]
+    DB[(PostgreSQL)]
+    Storage[(Object Storage)]
+
+    Supervisor --> Research
+    Supervisor --> Generation
+    Research --> Supervisor
+    Generation --> Safety
+    Safety -->|Approve| Supervisor
+    Safety -->|Escalate| Human
+    Human --> Supervisor
+    Supervisor --> DB
+    Generation --> Storage

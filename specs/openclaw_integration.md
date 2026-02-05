@@ -25,20 +25,18 @@ It covers **communication protocols, data exchange, security, and failure handli
 
 ## 3. Integration Architecture
 
-[Research Agent] --> [Influencer Agent] --> [Generation Agent]
-↘-----------------↗
-[Safety Agent] monitors outputs
-|
-v
-[OpenClaw Platform]
-|
-v
-[Supervisor Agent orchestrates]
+### 3.1 Visual Workflow
+![OpenClaw Integration](/research/diagrams/openclaw_integration.svg)  
+*Illustrates Research Agent → Influencer Agent → Generation Agent workflow with Supervisor orchestration and Safety monitoring.*
 
-**Key Points:**
+
+
+### 3.2 Key Points
 - OpenClaw acts as either a **data source** or **data sink** for agent outputs.  
-- Supervisor Agent coordinates interactions with OpenClaw.  
-- Safety Agent monitors any data exchanged to prevent unsafe or prohibited content.  
+- Supervisor Agent coordinates all interactions with OpenClaw.  
+- Safety Agent monitors exchanged data to **prevent unsafe, unethical, or prohibited content**.  
+- Research Agent provides **trend and insights data** to other agents, ultimately flowing to OpenClaw.  
+
 
 ---
 
@@ -47,6 +45,7 @@ v
 - **WebSocket / Event Stream** for real-time data updates  
 - **Authentication:** API key or OAuth2 token-based  
 - **Rate Limits:** Must follow OpenClaw API guidelines  
+- **Retries:** Supervisor orchestrates **automatic retry logic** for transient failures  
 
 ---
 
