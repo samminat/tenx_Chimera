@@ -1,129 +1,151 @@
-Project Chimera — Architecture Strategy
-Project Chimera represents a pivot toward Autonomous AI Influencers: agentic systems capable of researching trends, generating content, producing media, and managing engagement with minimal human intervention.
+# Architecture Strategy – Project Chimera
 
-1. Problem Framing
-The Problem
-Most AI systems fail at scale because they rely on:
-Fragile prompt chains
-Implicit behavior encoded in code instead of specs
-Tight coupling between models, providers, and workflows
-When scaled, these systems hallucinate, break silently, or become impossible to reason about.
-The Solution
-Project Chimera adopts an intent-first architecture where:
-Specs and rules are the source of truth
-Agents are constrained by contracts
-Infrastructure enforces reliability via validation, CI/CD, tests, and provider-aware failure handling
+## Context
+Project Chimera represents a pivot toward **Autonomous AI Influencers**—digital entities capable of researching trends, generating multimedia content, publishing, and managing engagement with minimal human intervention.
 
-2. Research Summary
-Key Insights from Reading
- The Trillion Dollar AI Code Stack
-AI-native systems require new abstractions, not wrappers around prompts
-Agents must be governed by interfaces, contracts, and workflows
-Infrastructure (logging, evals, CI) is as important as models
+This document defines the **high‑level architecture** before any implementation begins. In accordance with **Spec‑Driven Development (SDD)**, this file is a source‑of‑truth artifact. No production code may be written until this architecture is ratified.
 
-OpenClaw — Agent Social Networks
-Multi-agent systems outperform monoliths when roles are explicit
-Coordination requires supervision, not free-form autonomy
-MoltBook — Social Media for Bots
-Content bots behave like distributed systems
-Failure isolation and retries are critical
-State must be durable and auditable
-Project Chimera SRS
-Intent-driven workflows
-Multi-modal generation (text, music, video)
-Clear separation of agents, providers, and pipelines
+---
 
-3. Agent Pattern Decision
-Chosen Pattern: Hierarchical Swarm
-Why not Sequential Chain?
-Linear chains are brittle
-A single hallucination poisons downstream steps
-Poor parallelism
-Why Hierarchical Swarm?
-Clear command-and-control
-Parallel agents with isolated responsibilities
-Central supervision enforces policy, safety, and retries
-Agent Roles
-Supervisor Agent
-Orchestrates workflow
-Enforces rules and specs
-Handles provider failures
-Research Agent
-Trend analysis
-Topic discovery
-Content Agent
-Script and caption generation
-Media Agent
-Music generation
-Video generation (provider-aware)
-Publishing Agent
-Platform formatting
-Scheduling and posting
+## Design Principles
 
-4. Human-in-the-Loop (Safety Layer)
-Design Principle
-Humans should approve outcomes, not processes.
-Approval Placement
-Post-generation, pre-publish
-Human reviews:
-Generated scripts
-Final rendered media
-Policy or brand compliance flags
-Why This Layer Works
-Prevents unsafe or off-brand content
-Avoids slowing down autonomous research and drafting
-Acts as a final circuit breaker
-Optional Modes
-Manual approval (early stage)
-Policy-based auto-approval (mature stage)
+1. **Intent Over Prompts**  
+   System behavior is driven by specifications and contracts, not fragile prompt chains.
 
-5. Data Architecture
-Problem
-High-velocity media systems generate:
-Large volumes of metadata
-Asynchronous updates
-Cross-agent state
-Decision: Hybrid SQL + Object Storage
-SQL (Primary Metadata Store)
-Recommended: PostgreSQL
-Stores:
-Agent runs
-Content specs
-Approval states
-Provider responses
-Why SQL?
-Strong consistency
-Relational querying ("Which videos failed approval?")
-Transactional safety
-Object Storage (Media Blobs)
-Videos
-Audio
-Images
-Referenced by SQL via URLs / IDs
-Why Not Pure NoSQL?
-Weak relational queries
-Harder audits
-Poor fit for approval workflows
+2. **Separation of Concerns**  
+   Research, generation, safety, and orchestration are isolated agents with explicit responsibilities.
 
-6. Infrastructure & Reliability
-Core Principles
-Fail fast, fail loudly
-Provider-aware degradation
-Deterministic agent behavior
-Examples
-Invalid API key → AuthenticationError
-Unsupported model → CapabilityError
-Timeout → Retry or fallback provider
-No silent failures.
+3. **Deterministic Guardrails**  
+   Safety and approval logic must be structural, not advisory.
 
-7. High-Level Architecture Diagram
+4. **Composable Autonomy**  
+   Agents can be upgraded, replaced, or disabled independently.
 
+5. **Human‑in‑the‑Loop by Design**  
+   Human approval is explicit, bounded, and auditable.
 
+---
 
-8. Why This Architecture Scales
-Specs, not prompts, define behavior
-Agents are replaceable and testable
-Human oversight is intentional, not accidental
-Infrastructure enforces correctness
+## Agent Pattern Selection
 
+### Chosen Pattern: **Hierarchical Swarm**
 
+**Why not Sequential Chain?**
+- Sequential chains fail under scale
+- Error propagation is linear
+- No supervisory correction layer
+
+**Why Hierarchical Swarm works for Chimera:**
+- Central Supervisor agent maintains global intent
+- Specialized worker agents operate independently
+- Safety agent has veto authority
+- Human approval is injected at controlled checkpoints
+
+### Agent Roles
+
+| Agent | Responsibility |
+|------|----------------|
+| Supervisor Agent | Orchestration, task delegation, retries, escalation |
+| Research Agent | Trend analysis, topic discovery, audience modeling |
+| Generation Agent | Text, image, music, video generation |
+| Safety Agent | Policy enforcement, brand alignment, risk detection |
+| Human Reviewer | Final approval (selective, not constant) |
+
+---
+
+## Human‑in‑the‑Loop (Safety Layer)
+
+Human approval is **not optional** and **not continuous**.
+
+### Approval Triggers
+Human review is required when:
+- Content targets real individuals or brands
+- Political or social topics are detected
+- Safety agent confidence < threshold
+- New platform or audience segment is introduced
+
+### Human Interaction Model
+- Human acts as an **override authority**, not an operator
+- Decisions are logged and versioned
+- Feedback is fed back into Safety Agent heuristics
+
+---
+
+## Data Architecture
+
+### Requirements
+- High‑velocity metadata ingestion
+- Durable audit trails
+- Cheap storage for large media assets
+
+### Chosen Approach: **Hybrid Storage**
+
+#### SQL (PostgreSQL)
+Used for:
+- Agent decisions
+- Content lifecycle states
+- Approval logs
+- Audit and compliance records
+
+#### Object Storage (S3 / GCS)
+Used for:
+- Videos
+- Images
+- Audio
+- Model artifacts
+
+**Why not pure NoSQL?**
+- Strong relational guarantees are required for audits
+- Schema evolution is manageable at this stage
+
+---
+
+## High‑Level Architecture Diagram
+
+```mermaid
+flowchart TD
+    Human[Human Reviewer]
+
+    Supervisor[Supervisor Agent]
+    Research[Research Agent]
+    Generation[Generation Agent]
+    Safety[Safety Agent]
+
+    DB[(PostgreSQL)]
+    Storage[(Object Storage)]
+
+    Supervisor --> Research
+    Supervisor --> Generation
+    Research --> Supervisor
+    Generation --> Safety
+    Safety -->|Approve| Supervisor
+    Safety -->|Escalate| Human
+    Human --> Supervisor
+
+    Supervisor --> DB
+    Generation --> Storage
+```
+
+---
+
+## Failure Handling Strategy
+
+- Agent failure → Supervisor retries or reassigns
+- Safety rejection → Human escalation or content discard
+- External API failure → Circuit breaker + fallback model
+
+---
+
+## Ratification Checklist
+
+This architecture is considered **ratified** when:
+- [ ] Agent roles are accepted
+- [ ] Human‑in‑the‑loop boundaries are approved
+- [ ] Storage strategy is agreed upon
+- [ ] Diagram reflects shared understanding
+
+Only after ratification may agent contracts be finalized.
+
+---
+
+**Status:** Draft (Pending Ratification)

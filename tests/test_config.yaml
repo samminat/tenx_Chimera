@@ -1,0 +1,63 @@
+
+---
+
+## 2. Test Execution Workflow
+
+### 2.1 Prerequisites
+- All agent SRS/contract files in `/specs` must be **ratified**  
+- Test environment configured with **mock APIs and data sources**  
+- Supervisor Agent must be capable of orchestrating test execution  
+
+### 2.2 Testing Approach
+1. **Isolated Agent Testing**
+   - Each agent is tested against its SRS/contract  
+   - Verify responsibilities, inputs/outputs, constraints, and failure behavior  
+   - Use mock data or simulated API responses where needed  
+
+2. **Integrated Workflow Testing**
+   - Supervisor Agent orchestrates all agents  
+   - Verify task sequencing, retry handling, and escalation  
+   - Ensure Safety Agent detects unsafe outputs and halts execution if needed  
+
+3. **Acceptance Criteria Verification**
+   - Each test case defines **measurable pass/fail criteria**  
+   - Logs must be produced for auditing and debugging  
+
+### 2.3 Test Automation Notes
+- Tests may later be automated using Python, Node.js, or any preferred framework  
+- API mocks or stubs can simulate external social media platforms  
+- Continuous integration (CI) pipelines should **run all acceptance tests before code merges**  
+
+---
+
+## 3. Test Governance
+- No agent implementation should bypass these acceptance tests  
+- Each test failure must be investigated and **resolved before ratification**  
+- Safety-critical failures must trigger **immediate escalation to Product Owner**  
+
+---
+
+## 4. Links to Agent Tests
+
+| Agent | Test File | Description |
+|-------|-----------|-------------|
+| Influencer Agent | `influencer_agent.tests.md` | Tests discovery, ranking, metrics, reporting, alerts |
+| Research Agent   | `research_agent.tests.md`   | Tests research, normalization, trend detection, reporting |
+| Generation Agent | `generation_agent.tests.md` | Tests content generation, recommendations, error handling |
+| Safety Agent     | `safety_agent.tests.md`     | Tests safety monitoring, violation detection, escalation |
+| Supervisor Agent | `supervisor_agent.tests.md` | Tests orchestration, retries, state machine, reporting |
+
+---
+
+## 5. Ratification & Approval
+These tests are **binding verification artifacts**.  
+No implementation in `/src` shall bypass these tests.  
+
+**Approval Signatures:**  
+- [ ] Product Owner  
+- [ ] Technical Lead  
+- [ ] Compliance Officer  
+
+---
+
+**End of Document**
