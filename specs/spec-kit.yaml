@@ -1,0 +1,15 @@
+# Sample Spec Kit configuration for Project Chimera
+# Adjust fields according to the GitHub Spec Kit documentation.
+
+project:
+  name: "Project Chimera: The Agentic Infrastructure Challenge"
+  version: "0.1.0"
+
+specs:
+  - path: "./specs/*.md"
+  - path: "./specs/**/*.yaml"
+
+# Example: mapping of checks to run (provider-specific)
+checks:
+  validate: true
+  lint: true

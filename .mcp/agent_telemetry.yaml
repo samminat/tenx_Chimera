@@ -1,0 +1,67 @@
+# Agent-level telemetry mapping (non-invasive hooks)
+# This file maps agents to the telemetry features captured by MCP Sense.
+# Agents should read this configuration at runtime to enable telemetry hooks
+# without changing agent logic (implementation depends on agent runtime).
+
+agents:
+  Influencer:
+    telemetry_profile: default
+    capture:
+      lifecycle: true
+      request_response_tracing: true
+      events:
+        - post
+        - reply
+
+  Research:
+    telemetry_profile: default
+    capture:
+      lifecycle: true
+      request_response_tracing: true
+      events:
+        - query
+        - fetch
+
+  Generation:
+    telemetry_profile: default
+    capture:
+      lifecycle: true
+      request_response_tracing: true
+      events:
+        - generate
+        - commit
+
+  Safety:
+    telemetry_profile: safety
+    capture:
+      lifecycle: true
+      monitoring_alerts: true
+      events:
+        - violation
+        - mitigation
+
+  Supervisor:
+    telemetry_profile: orchestration
+    capture:
+      lifecycle: true
+      orchestration_logs: true
+      events:
+        - plan
+        - execute
+        - retry
+        - escalate
+
+# Profiles map to features in .mcp/telemetry.yaml (default/profile names are
+# conventions; runtime integration should map these names to concrete settings).
+profiles:
+  default:
+    send_traces: true
+    include_headers: true
+
+  safety:
+    send_traces: true
+    alerting: true
+
+  orchestration:
+    send_traces: true
+    include_run_context: true

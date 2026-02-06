@@ -1,0 +1,31 @@
+# Tenx MCP Sense telemetry configuration
+# Do not store secrets here — use environment variables as placeholders.
+
+endpoint: "${TENX_MCP_SENSE_ENDPOINT}"
+api_key: "${TENX_MCP_SENSE_API_KEY}"
+enable_telemetry: true
+
+trace_agents:
+  - Influencer
+  - Research
+  - Generation
+  - Safety
+  - Supervisor
+
+log:
+  file: "logs/mcp_sense.log"
+  level: INFO
+
+features:
+  request_response_tracing: true        # record request/response traces for agents
+  agent_run_lifecycle: true            # record agent start/stop/status events
+  supervisor_orchestration_logging: true
+  safety_monitoring: true
+
+headers:
+  X-Device: "${MCP_DEVICE:-linux}"
+  X-Coding-Tool: "${MCP_TOOL:-vscode}"
+
+retry:
+  max_attempts: 3
+  backoff_seconds: 2
