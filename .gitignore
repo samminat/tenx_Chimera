@@ -1,8 +1,1 @@
-# Ignore runtime logs
-logs/
-
-# Virtualenv
-.venv/
-
-# Spec Kit agent folder (may contain secrets)
-.specify/agent/
+.env
