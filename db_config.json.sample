@@ -1,0 +1,8 @@
+{
+  "driver": "postgresql",
+  "host": "localhost",
+  "port": 5432,
+  "database": "chimera_db",
+  "username": "chimera_user",
+  "password": "change_me_in_production"
+}
